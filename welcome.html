@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talkzi Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f7e8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            margin: 0 1rem;
+            position: relative;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .sidebar {
+            background-color: rgba(76, 175, 80, 0.8);
+            color: #fff;
+            position: fixed;
+            top: 10%;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            transition: transform 0.3s ease;
+            transform: translateX(-250px);
+            z-index: 1000;
+            overflow-y: auto;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar .menu {
+            width: 100%;
+            padding: 1rem;
+            border-bottom: 1px solid #fff;
+        }
+
+        .sidebar .menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar .menu a:hover {
+            background-color: #45a049;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 100px;
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.shift {
+            margin-left: 0;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 1.2rem;
+        }
+
+        .toggle-btn.close {
+            background-color: #e53935;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-cards {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 2rem;
+            margin: 1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            flex: 1 1 calc(50% - 2rem);
+            max-width: calc(50% - 2rem);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card i {
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .card a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        /* Chatbot logo styling */
+        .chatbot-logo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            background-color: #4caf50;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+       .chatbot-logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;  /* This makes the image circular */
+    object-fit: cover;   /* Ensures the image maintains its aspect ratio */
+}
+       
+        .chatbot-logo:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                flex: 1 1 calc(100% - 2rem);
+                max-width: calc(100% - 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+            <div class="logo">
+                <img src="images/taalkzi.jpeg" alt="Talkzi Logo">
+            </div>
+            <h1>Welcome to Talkzi</h1>
+            <div class="logo">
+                <img src="images/taalkzi.jpeg" alt="Talkzi Logo">
+            </div>
+        </div>
+    </header>
+    
+    <div class="sidebar">
+        <div class="menu">
+            <a href="postsR.html"><i class="fas fa-pen"></i> Posts</a>
+            <a href="LikesR.html"><i class="fas fa-thumbs-up"></i> Likes</a>
+            <a href="CommentsR.html"><i class="fas fa-comments"></i> Comments</a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="dashboard-cards">
+            <div class="card">
+                <i class="fas fa-user-shield"></i>
+                <h3>Admin</h3>
+                <a href="admin_login.html">Go to Admin Dashboard</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-users"></i>
+                <h3>Users</h3>
+                <a href="user_register.html">Go to Users Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+   
+<a href="chatBot.jsp">
+  <div class="chatbot-logo">
+      <img src="images/chatbot-icon.jpg" alt="Chatbot Logo">
+  </div>
+</a>
+
+    
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('shift');
+            toggleBtn.classList.toggle('close');
+            if (sidebar.classList.contains('active')) {
+                toggleBtn.innerHTML = '×';
+            } else {
+                toggleBtn.innerHTML = '☰';
+            }
+        }
+
+        function openChatbot() {
+            // Add your chatbot functionality here
+            alert('Chatbot opened!');
+        }
+    </script>
+</body>
+</html>
